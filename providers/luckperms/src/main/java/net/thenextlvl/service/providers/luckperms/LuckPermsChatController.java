@@ -33,7 +33,7 @@ public final class LuckPermsChatController implements ChatController {
 
     @Override
     public CompletableFuture<ChatProfile> loadProfile(final OfflinePlayer player, final World world) {
-        return luckPerms.getUserManager().loadUser(player.getUniqueId()).thenApply(user -> {
+        return luckPerms.getUserManager().loadUser(player.getUniqueId(), player.getName()).thenApply(user -> {
             final var options = QueryOptions.contextual(ImmutableContextSet.of("world", world.getName()));
             return new LuckPermsChatProfile(user, options, world);
         });

@@ -85,7 +85,7 @@ public record LuckPermsChatProfile(
     @Override
     public boolean setDisplayName(@Nullable final String displayName) {
         if (displayName == null) return unsetDisplayName();
-        final var result = user().data().add(DisplayNameNode.builder(displayName).build());
+        final var result = user().data().add(DisplayNameNode.builder(displayName).context(options().context()).build());
         LuckPermsProvider.get().getUserManager().saveUser(user());
         return result.wasSuccessful();
     }
