@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 public abstract class PlaceholderStore<T> implements Listener {
     private final Map<Pattern, PlaceholderResolver<T>> resolvers = new HashMap<>();
     private final Class<T> providerClass;
-    private @Nullable T provider;
+    private volatile @Nullable T provider;
 
     protected final Plugin plugin;
 
