@@ -84,7 +84,8 @@ public record GroupManagerGroup(org.anjocaido.groupmanager.data.Group group) imp
     @Override
     public @Unmodifiable Map<String, Boolean> getPermissions() {
         return group.getPermissionList().stream().collect(Collectors.toUnmodifiableMap(
-                permission -> permission, permission -> checkPermission(permission).toBooleanOrElse(false))
+                permission -> permission, permission -> checkPermission(permission).toBooleanOrElse(false),
+                (existing, replacement) -> replacement)
         );
     }
 

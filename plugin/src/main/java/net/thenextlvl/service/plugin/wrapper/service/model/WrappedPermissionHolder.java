@@ -30,7 +30,8 @@ public final class WrappedPermissionHolder implements PermissionHolder {
                 : player.getEffectivePermissions().stream()
                   .collect(Collectors.toUnmodifiableMap(
                           PermissionAttachmentInfo::getPermission,
-                          PermissionAttachmentInfo::getValue
+                          PermissionAttachmentInfo::getValue,
+                          (existing, replacement) -> replacement
                   ));
     }
 

@@ -17,7 +17,8 @@ public record SuperPermsPermissionHolder(CommandSender sender) implements Permis
         return sender.getEffectivePermissions().stream()
                 .collect(Collectors.toUnmodifiableMap(
                         PermissionAttachmentInfo::getPermission,
-                        PermissionAttachmentInfo::getValue
+                        PermissionAttachmentInfo::getValue,
+                        (existing, replacement) -> replacement
                 ));
     }
 

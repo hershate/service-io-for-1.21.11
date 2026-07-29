@@ -8,10 +8,12 @@ import org.bukkit.World;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public final class VaultUnlockedChatProfile implements ChatProfile, MetadataHolder {
     private final @Nullable World world;
@@ -66,7 +68,10 @@ public final class VaultUnlockedChatProfile implements ChatProfile, MetadataHold
 
     @Override
     public @Unmodifiable Set<String> getGroups() {
-        return Set.of(chat.getPlayerGroups(world != null ? world.getName() : null, holder));
+        // getPlayerGroups may report a group more than once (e.g. diamond inheritance); Set.of
+        // throws on duplicates, so collect into a set that tolerates them instead.
+        return Arrays.stream(chat.getPlayerGroups(world != null ? world.getName() : null, holder))
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     @Override

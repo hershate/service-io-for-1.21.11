@@ -21,7 +21,8 @@ public record GroupManagerPermissionHolder(User user, WorldDataHolder holder) im
     @Override
     public @Unmodifiable Map<String, Boolean> getPermissions() {
         return user().getPermissionList().stream().collect(Collectors.toUnmodifiableMap(
-                permission -> permission, permission -> checkPermission(permission).toBooleanOrElse(false))
+                permission -> permission, permission -> checkPermission(permission).toBooleanOrElse(false),
+                (existing, replacement) -> replacement)
         );
     }
 
