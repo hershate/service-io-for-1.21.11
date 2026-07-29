@@ -167,7 +167,7 @@ public final class EconomyTestSuite extends TestSuite<EconomyController> {
 
     private void assertAccountWorld(final Account account) {
         pass("getWorld", account.getWorld()
-                .map(world -> world.key().asString())
+                .map(world -> world.getName())
                 .orElse("global account (no world)"));
     }
 

@@ -63,7 +63,7 @@ public final class ChatTestSuite extends TestSuite<ChatController> {
     }
 
     private void assertGetWorld(final ChatProfile profile) {
-        pass("getWorld", profile.getWorld().map(world -> world.key().asString()).orElse("(not set)"));
+        pass("getWorld", profile.getWorld().map(world -> world.getName()).orElse("(not set)"));
     }
 
     private void assertGetGroups(final ChatProfile profile) {

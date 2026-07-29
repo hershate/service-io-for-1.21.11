@@ -129,7 +129,7 @@ public final class GroupTestSuite extends TestSuite<GroupController> {
     }
 
     private void assertGetWorld(final Group group) {
-        pass("getWorld", group.getWorld().map(world -> world.key().asString()).orElse("(not set)"));
+        pass("getWorld", group.getWorld().map(world -> world.getName()).orElse("(not set)"));
     }
 
     private void assertGetWeight(final Group group) {

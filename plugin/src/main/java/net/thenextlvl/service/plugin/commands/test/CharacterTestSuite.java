@@ -124,7 +124,7 @@ public final class CharacterTestSuite extends TestSuite<CharacterController> {
     private void assertGetCharactersByWorld(final Character character) {
         character.getWorld().ifPresentOrElse(world -> {
             final var characters = controller.getCharacters(world);
-            pass("getCharacters(world)", characters.count() + " character(s) in " + world.key().asString());
+            pass("getCharacters(world)", characters.count() + " character(s) in " + world.getName());
         }, () -> fail("getCharacters(world)", "character has no world"));
     }
 
@@ -346,7 +346,7 @@ public final class CharacterTestSuite extends TestSuite<CharacterController> {
 
     private void assertGetWorld(final Character character) {
         character.getWorld().ifPresentOrElse(world -> {
-            pass("getWorld", world.key().asString());
+            pass("getWorld", world.getName());
         }, () -> fail("getWorld", "world is null"));
     }
 
