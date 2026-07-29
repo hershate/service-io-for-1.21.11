@@ -40,9 +40,11 @@ public final class FancyHologramController implements HologramController {
     @Override
     public boolean deleteHologram(final Hologram hologram) {
         if (hologram instanceof FancyHologram(final com.fancyinnovations.fancyholograms.api.hologram.Hologram fancy)) {
-            if (!FancyHolograms.get().getRegistry().unregister(fancy)) return false;
+            // Hide from current viewers BEFORE unregistering: getTrackedBy() reads the hologram's
+            // viewer set, which unregister may clear, in which case hiding afterwards would reach
+            // nobody and leave stale display entities on clients.
             FancyHolograms.get().getController().hideHologramFrom(fancy, hologram.getTrackedBy().toArray(Player[]::new));
-            return true;
+            return FancyHolograms.get().getRegistry().unregister(fancy);
         } else return false;
     }
 
