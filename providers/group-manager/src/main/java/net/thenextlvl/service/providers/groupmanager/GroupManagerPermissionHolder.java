@@ -110,7 +110,14 @@ public record GroupManagerPermissionHolder(User user, WorldDataHolder holder) im
     @Override
     public boolean inGroup(final String name) {
         final var handler = holder().getPermissionsHandler();
-        return handler.hasGroupInInheritance(user().getGroup(), name);
+        if (handler.hasGroupInInheritance(user().getGroup(), name)) return true;
+        // hasGroupInInheritance only walks the primary group's inheritance tree and
+        // ignores the user's sub-groups (added via addGroup -> addSubGroup), so those
+        // would be reported as "not in group" and filtered out of getGroups(). The
+        // Vault hook resolves this via the player-based inGroup check; mirror that by
+        // also testing the user's sub-groups directly and their inheritance.
+        return user().subGroupListCopy().stream().anyMatch(sub ->
+                sub.getName().equals(name) || handler.hasGroupInInheritance(sub, name));
     }
 
     @Override

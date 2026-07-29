@@ -28,7 +28,7 @@ public record GroupManagerChatProfile(
 
     @Override
     public Optional<String> getName() {
-        return Optional.of(user().getLastName());
+        return Optional.ofNullable(user().getLastName());
     }
 
     @Override
