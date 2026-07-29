@@ -13,7 +13,7 @@ final class GroupConverter extends PlayerConverter<GroupController> {
 
     @Override
     public CompletableFuture<Void> convert(final OfflinePlayer player) {
-        return source.resolveGroupHolder(player).thenAccept(holder -> target.resolveGroupHolder(player)
+        return source.resolveGroupHolder(player).thenCompose(holder -> target.resolveGroupHolder(player)
                 .thenAccept(targetHolder -> {
                     holder.getGroups().forEach(targetHolder::addGroup);
                     holder.getPermissions().forEach(targetHolder::setPermission);
@@ -23,16 +23,19 @@ final class GroupConverter extends PlayerConverter<GroupController> {
 
     @Override
     public CompletableFuture<Void> convert() {
-        source.loadGroups().thenAccept(groups -> groups.forEach(group -> group.getWorld()
-                .map(world -> target.createGroup(group.getName(), world))
-                .orElseGet(() -> target.createGroup(group.getName()))
-                .thenAccept(targetGroup -> {
-                    group.getDisplayName().ifPresent(targetGroup::setDisplayName);
-                    group.getPermissions().forEach(targetGroup::setPermission);
-                    group.getPrefixes().forEach((priority, prefix) -> targetGroup.setPrefix(prefix, priority));
-                    group.getSuffixes().forEach((priority, suffix) -> targetGroup.setSuffix(suffix, priority));
-                    group.getWeight().ifPresent(targetGroup::setWeight);
-                })));
-        return super.convert();
+        return source.loadGroups()
+                .thenCompose(groups -> CompletableFuture.allOf(groups.stream()
+                        .map(group -> group.getWorld()
+                                .map(world -> target.createGroup(group.getName(), world))
+                                .orElseGet(() -> target.createGroup(group.getName()))
+                                .thenAccept(targetGroup -> {
+                                    group.getDisplayName().ifPresent(targetGroup::setDisplayName);
+                                    group.getPermissions().forEach(targetGroup::setPermission);
+                                    group.getPrefixes().forEach((priority, prefix) -> targetGroup.setPrefix(prefix, priority));
+                                    group.getSuffixes().forEach((priority, suffix) -> targetGroup.setSuffix(suffix, priority));
+                                    group.getWeight().ifPresent(targetGroup::setWeight);
+                                }))
+                        .toArray(CompletableFuture[]::new)))
+                .thenCompose(v -> super.convert());
     }
 }
