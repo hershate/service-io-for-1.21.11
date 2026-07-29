@@ -40,7 +40,10 @@ public final class CitizensCharacter implements Character {
 
     @Override
     public boolean isPersistent() {
-        return npc.data().get(NPC.Metadata.SHOULD_SAVE);
+        // Use the 2-arg overload: get(Metadata) delegates to get(String), which returns null for
+        // keys that were never set, so the single-arg form NPEs on auto-unboxing for NPCs whose
+        // SHOULD_SAVE was never explicitly configured. Citizens' default is to persist (true).
+        return npc.data().get(NPC.Metadata.SHOULD_SAVE, true);
     }
 
     @Override
