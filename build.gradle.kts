@@ -4,7 +4,7 @@ plugins {
 }
 
 val compileJvm = 21
-val toolchainJvm = 25
+val toolchainJvm = 21
 
 allprojects {
     apply {
