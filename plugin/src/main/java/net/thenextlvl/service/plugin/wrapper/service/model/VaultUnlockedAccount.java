@@ -48,6 +48,7 @@ public final class VaultUnlockedAccount implements Account {
     @Override
     public TransactionResult deposit(final Number amount, final Currency currency) {
         if (!canHold(currency)) return TransactionResult.unsupported(currency);
+        if (!isFinite(amount)) return rejected(amount, currency);
         final var bdAmount = new BigDecimal(amount.toString());
         final var currencyName = ((VaultUnlockedCurrency) currency).currency();
         final var response = world != null
@@ -62,6 +63,7 @@ public final class VaultUnlockedAccount implements Account {
     @Override
     public TransactionResult withdraw(final Number amount, final Currency currency) {
         if (!canHold(currency)) return TransactionResult.unsupported(currency);
+        if (!isFinite(amount)) return rejected(amount, currency);
         final var bdAmount = new BigDecimal(amount.toString());
         final var currencyName = ((VaultUnlockedCurrency) currency).currency();
         final var response = world != null
@@ -79,6 +81,7 @@ public final class VaultUnlockedAccount implements Account {
     @Override
     public TransactionResult setBalance(final Number balance, final Currency currency) {
         if (!canHold(currency)) return TransactionResult.unsupported(currency);
+        if (!isFinite(balance)) return rejected(balance, currency);
         final var current = getBalance(currency);
         final var difference = new BigDecimal(balance.toString()).subtract(current);
         if (difference.compareTo(BigDecimal.ZERO) > 0) return deposit(difference, currency);
@@ -91,5 +94,17 @@ public final class VaultUnlockedAccount implements Account {
         return currency instanceof VaultUnlockedCurrency(
                 final Economy wrapped, final String currency1, final String name
         ) && wrapped == economy;
+    }
+
+    private TransactionResult rejected(final Number amount, final Currency currency) {
+        // Reject non-finite amounts (NaN / Infinity), which a client can submit and which would
+        // otherwise crash new BigDecimal(amount.toString()) and could corrupt the backend.
+        return new TransactionResult(currency, amount, getBalance(currency), TransactionResult.Status.FAILURE);
+    }
+
+    private static boolean isFinite(final Number amount) {
+        if (amount instanceof final Double d) return Double.isFinite(d);
+        if (amount instanceof final Float f) return Float.isFinite(f);
+        return true;
     }
 }

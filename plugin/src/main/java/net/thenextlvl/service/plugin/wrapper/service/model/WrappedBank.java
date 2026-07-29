@@ -52,6 +52,7 @@ public final class WrappedBank implements Bank {
     @Override
     public TransactionResult deposit(final Number amount, final Currency currency) {
         if (!canHold(currency)) return TransactionResult.unsupported(currency);
+        if (!isFinite(amount)) return rejected(amount, currency);
         final var response = economy.bankDeposit(name, amount.doubleValue());
         return new TransactionResult(currency, amount, response.balance, switch (response.type) {
             case SUCCESS -> TransactionResult.Status.SUCCESS;
@@ -62,6 +63,7 @@ public final class WrappedBank implements Bank {
     @Override
     public TransactionResult withdraw(final Number amount, final Currency currency) {
         if (!canHold(currency)) return TransactionResult.unsupported(currency);
+        if (!isFinite(amount)) return rejected(amount, currency);
         final var response = economy.bankWithdraw(name, amount.doubleValue());
         return new TransactionResult(currency, amount, response.balance, switch (response.type) {
             case SUCCESS -> TransactionResult.Status.SUCCESS;
@@ -75,6 +77,7 @@ public final class WrappedBank implements Bank {
     @Override
     public TransactionResult setBalance(final Number balance, final Currency currency) {
         if (!canHold(currency)) return TransactionResult.unsupported(currency);
+        if (!isFinite(balance)) return rejected(balance, currency);
         final var current = getBalance(currency);
         final var difference = new BigDecimal(balance.toString()).subtract(current);
         if (difference.compareTo(BigDecimal.ZERO) > 0) return deposit(difference, currency);
@@ -85,6 +88,18 @@ public final class WrappedBank implements Bank {
     @Override
     public boolean canHold(final Currency currency) {
         return currency instanceof WrappedCurrency(final Economy wrapped) && wrapped == economy;
+    }
+
+    private TransactionResult rejected(final Number amount, final Currency currency) {
+        // Reject non-finite amounts (NaN / Infinity), which a client can submit and which would
+        // otherwise crash new BigDecimal(...) in setBalance or feed a NaN into the backend.
+        return new TransactionResult(currency, amount, getBalance(currency), TransactionResult.Status.FAILURE);
+    }
+
+    private static boolean isFinite(final Number amount) {
+        if (amount instanceof final Double d) return Double.isFinite(d);
+        if (amount instanceof final Float f) return Float.isFinite(f);
+        return true;
     }
 
     @Override
