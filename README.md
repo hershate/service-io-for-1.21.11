@@ -1,40 +1,33 @@
-# ServiceIO – Full Replacement for Vault
+# ServiceIO —— Vault 的完整替代品
 
 > [!IMPORTANT]
-> **Unofficial fork for Minecraft 1.21.11 · 面向 Minecraft 1.21.11 的非官方分支**
->
-> This repository is an **unofficial**, community-maintained fork of ServiceIO that targets **Minecraft 1.21.11 / JDK 21**
-> specifically. It is **not** affiliated with, endorsed by, or maintained by the original authors, and it is **not** an
-> official release of ServiceIO. For the official upstream project, please visit
-> [TheNextLvl-net/service-io](https://github.com/TheNextLvl-net/service-io).
+> **面向 Minecraft 1.21.11 的非官方分支**
 >
 > 本仓库是 ServiceIO 的**非官方**社区维护分支，**仅面向 Minecraft 1.21.11 / JDK 21**。本仓库与原作者无关、未获其
 > 认可或维护，也不是 ServiceIO 的官方发布版本。官方上游项目请前往
 > [TheNextLvl-net/service-io](https://github.com/TheNextLvl-net/service-io)。
 
-A modern, drop-in replacement for Vault that offers enhanced functionality,
-better performance, and seamless integration across plugins.
+一款现代化的、可直接替换 Vault 的插件，提供更强的功能、更好的性能，以及跨插件的无缝集成。
 
 > [!NOTE]
-> ServiceIO is designed as a full replacement for Vault, so Vault is no longer necessary when you make the switch. Rest
-> assured, all your existing plugins that depend on Vault will continue to function seamlessly with ServiceIO.
+> ServiceIO 被设计为 Vault 的完整替代品，因此切换后不再需要 Vault。请放心，所有依赖 Vault 的现有插件都能在
+> ServiceIO 下继续正常工作。
 
-## Why should You use ServiceIO?
+## 为什么选择 ServiceIO？
 
-- Full Vault replacement with drop-in compatibility for existing plugins.
-- Safer and more reliable API with nullability annotations, better docs, and actively maintained code.
-- Faster, more scalable performance through async data loading.
-- Seamless migration path: use Vault interfaces and ServiceIO together without extra integration work.
-- Data conversion for Economy, Permissions, Holograms, NPCs, and more, so plugin switching is easy.
+- 完整替代 Vault，对现有插件保持即插即用的兼容性。
+- 更安全、更可靠的 API：带有可空性注解、更完善的文档，且代码持续维护。
+- 通过异步数据加载实现更快、更具扩展性的性能。
+- 无缝迁移路径：可同时使用 Vault 接口与 ServiceIO，无需额外集成工作。
+- 支持经济、权限、全息图、NPC 等数据的转换，方便切换插件。
 
-### Incompatible Plugins
+### 不兼容的插件
 
-You can find a list of all known incompatible plugins [here](https://github.com/TheNextLvl-net/service-io/issues/62).
+所有已知的不兼容插件列表请见[此处](https://github.com/TheNextLvl-net/service-io/issues/62)。
 
-If you encounter a plugin that doesn't recognize ServiceIO as Vault and is not listed, report it by creating a new issue
-[here](https://github.com/TheNextLvl-net/service-io/issues/new?template=incompatible_plugin.yml).
+如果你遇到某个插件无法将 ServiceIO 识别为 Vault，且不在上述列表中，请[在此](https://github.com/TheNextLvl-net/service-io/issues/new?template=incompatible_plugin.yml)提交新 issue 进行反馈。
 
-[Download now](https://modrinth.com/project/MNPyHOe7#download)
+[立即下载](https://modrinth.com/project/MNPyHOe7#download)
 
 ---
 
