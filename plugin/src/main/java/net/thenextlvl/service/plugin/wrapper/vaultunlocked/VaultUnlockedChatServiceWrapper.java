@@ -179,9 +179,10 @@ public final class VaultUnlockedChatServiceWrapper extends Chat implements Wrapp
 
     private Optional<ChatProfile> getProfile(@Nullable final String worldName, final String name) {
         return Optional.ofNullable(plugin.getServer().getOfflinePlayerIfCached(name))
-                .flatMap(player -> Optional.ofNullable(worldName)
+                .map(player -> Optional.ofNullable(worldName)
                         .map(plugin.getServer()::getWorld)
-                        .map(world -> chatController.resolveProfile(player, world).join()));
+                        .map(world -> chatController.resolveProfile(player, world).join())
+                        .orElseGet(() -> chatController.resolveProfile(player).join()));
     }
 
     private Optional<Group> getGroup(@Nullable final String worldName, final String groupName) {

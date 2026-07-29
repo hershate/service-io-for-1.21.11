@@ -37,7 +37,11 @@ public final class VaultUnlockedAccount implements Account {
     @Override
     public BigDecimal getBalance(final Currency currency) {
         if (!canHold(currency)) throw new IllegalArgumentException("Currency not supported: " + currency);
-        if (world != null) return economy.balance(pluginName, owner, world.getName());
+        // VaultUnlocked only exposes currency-specific overloads together with a world argument,
+        // so honor the requested currency for world-scoped accounts and fall back to the default
+        // currency for global accounts (the backend has no world-less currency overload).
+        final var currencyName = ((VaultUnlockedCurrency) currency).currency();
+        if (world != null) return economy.balance(pluginName, owner, world.getName(), currencyName);
         return economy.balance(pluginName, owner);
     }
 
@@ -45,8 +49,9 @@ public final class VaultUnlockedAccount implements Account {
     public TransactionResult deposit(final Number amount, final Currency currency) {
         if (!canHold(currency)) return TransactionResult.unsupported(currency);
         final var bdAmount = new BigDecimal(amount.toString());
+        final var currencyName = ((VaultUnlockedCurrency) currency).currency();
         final var response = world != null
-                ? economy.deposit(pluginName, owner, world.getName(), bdAmount)
+                ? economy.deposit(pluginName, owner, world.getName(), currencyName, bdAmount)
                 : economy.deposit(pluginName, owner, bdAmount);
         return new TransactionResult(currency, amount, response.balance, switch (response.type) {
             case SUCCESS -> TransactionResult.Status.SUCCESS;
@@ -58,8 +63,9 @@ public final class VaultUnlockedAccount implements Account {
     public TransactionResult withdraw(final Number amount, final Currency currency) {
         if (!canHold(currency)) return TransactionResult.unsupported(currency);
         final var bdAmount = new BigDecimal(amount.toString());
+        final var currencyName = ((VaultUnlockedCurrency) currency).currency();
         final var response = world != null
-                ? economy.withdraw(pluginName, owner, world.getName(), bdAmount)
+                ? economy.withdraw(pluginName, owner, world.getName(), currencyName, bdAmount)
                 : economy.withdraw(pluginName, owner, bdAmount);
         return new TransactionResult(currency, amount, response.balance, switch (response.type) {
             case SUCCESS -> TransactionResult.Status.SUCCESS;

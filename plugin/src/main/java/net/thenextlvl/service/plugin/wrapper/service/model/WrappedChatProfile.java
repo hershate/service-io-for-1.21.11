@@ -94,27 +94,6 @@ public final class WrappedChatProfile implements ChatProfile, MetadataHolder {
     }
 
     @Override
-    public Optional<Boolean> booleanInfoNode(final String key) {
-        return Optional.of(chat.getPlayerInfoBoolean(
-                world != null ? world.getName() : null, holder, key, false
-        ));
-    }
-
-    @Override
-    public Optional<Double> doubleInfoNode(final String key) throws NumberFormatException {
-        return Optional.of(chat.getPlayerInfoDouble(
-                world != null ? world.getName() : null, holder, key, 0
-        ));
-    }
-
-    @Override
-    public Optional<Integer> intInfoNode(final String key) throws NumberFormatException {
-        return Optional.of(chat.getPlayerInfoInteger(
-                world != null ? world.getName() : null, holder, key, 0
-        ));
-    }
-
-    @Override
     public boolean removeInfoNode(final String key) {
         chat.setPlayerInfoString(world != null ? world.getName() : null, holder, key, null);
         return true;
