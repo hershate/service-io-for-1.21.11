@@ -217,7 +217,13 @@ public abstract class TestSuite<C extends Controller> {
         return enqueueMessage(() -> source.getSender().sendMessage(renderStep("•", NamedTextColor.AQUA, step.name, "running")))
                 .thenCompose(ignored -> invokeStep(step, player))
                 .exceptionally(throwable -> {
-                    stepAssertions.record(AssertionState.FAIL, step.name, rootMessage(throwable));
+                    // assertionFailure() already recorded a FAIL for RecordedAssertionError before
+                    // throwing; re-recording here would double-count the same assertion. Mirror the
+                    // lifecycle guard and only record genuine (non-assertion) step failures.
+                    final var cause = unwrapThrowable(throwable);
+                    if (!(cause instanceof RecordedAssertionError)) {
+                        stepAssertions.record(AssertionState.FAIL, step.name, rootMessage(cause));
+                    }
                     return null;
                 })
                 .thenCompose(ignored -> {
