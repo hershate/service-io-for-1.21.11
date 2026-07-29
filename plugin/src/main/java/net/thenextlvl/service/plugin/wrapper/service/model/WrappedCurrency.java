@@ -5,6 +5,7 @@ import net.milkbowl.vault.economy.Economy;
 import net.thenextlvl.service.economy.currency.Currency;
 import net.thenextlvl.service.economy.currency.CurrencyData;
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -27,9 +28,13 @@ public record WrappedCurrency(Economy economy) implements Currency {
 
     @Override
     public CurrencyData toData() {
-        return CurrencyData.of(getName(), getSymbol(), getFractionalDigits(),
-                Map.of(Locale.US, Component.text(economy.currencyNameSingular())),
-                Map.of(Locale.US, Component.text(economy.currencyNamePlural())));
+        final var singular = new HashMap<Locale, Component>();
+        final var plural = new HashMap<Locale, Component>();
+        final var nameSingular = economy.currencyNameSingular();
+        final var namePlural = economy.currencyNamePlural();
+        if (nameSingular != null) singular.put(Locale.US, Component.text(nameSingular));
+        if (namePlural != null) plural.put(Locale.US, Component.text(namePlural));
+        return CurrencyData.of(getName(), getSymbol(), getFractionalDigits(), singular, plural);
     }
 
     @Override

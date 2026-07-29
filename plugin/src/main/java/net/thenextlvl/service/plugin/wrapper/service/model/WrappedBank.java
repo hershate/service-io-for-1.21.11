@@ -74,10 +74,11 @@ public final class WrappedBank implements Bank {
 
     @Override
     public TransactionResult setBalance(final Number balance, final Currency currency) {
+        if (!canHold(currency)) return TransactionResult.unsupported(currency);
         final var current = getBalance(currency);
-        final var difference = balance.doubleValue() - current.doubleValue();
-        if (difference > 0) return deposit(difference, currency);
-        else if (difference < 0) return withdraw(-difference, currency);
+        final var difference = new BigDecimal(balance.toString()).subtract(current);
+        if (difference.compareTo(BigDecimal.ZERO) > 0) return deposit(difference, currency);
+        else if (difference.compareTo(BigDecimal.ZERO) < 0) return withdraw(difference.negate(), currency);
         return new TransactionResult(currency, balance, current, TransactionResult.Status.SUCCESS);
     }
 
