@@ -90,8 +90,10 @@ public final class LuckPermsGroupController implements GroupController {
 
     @Override
     public CompletableFuture<Boolean> deleteGroup(final String name) {
-        return luckPerms.getGroupManager().loadGroup(name).thenApply(optional ->
-                optional.map(luckPerms.getGroupManager()::deleteGroup).isPresent());
+        return luckPerms.getGroupManager().loadGroup(name).thenCompose(optional -> optional
+                .map(luckPerms.getGroupManager()::deleteGroup)
+                .map(future -> future.thenApply(unused -> true))
+                .orElse(CompletableFuture.completedFuture(false)));
     }
 
     @Override

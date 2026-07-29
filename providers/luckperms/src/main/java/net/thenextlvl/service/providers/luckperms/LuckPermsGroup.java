@@ -120,7 +120,7 @@ public record LuckPermsGroup(
 
     @Override
     public @Unmodifiable Map<String, Boolean> getPermissions() {
-        return group().getCachedData().getPermissionData().getPermissionMap();
+        return group().getCachedData().getPermissionData(options()).getPermissionMap();
     }
 
     @Override
