@@ -1,9 +1,16 @@
 # ServiceIO – Full Replacement for Vault
 
 > [!IMPORTANT]
-> **Third-party maintained fork.** This repository is a community-maintained fork of ServiceIO and is **not** affiliated
-> with, endorsed by, or maintained by the original authors. It is maintained independently by a third party. For the
-> upstream project, please visit [TheNextLvl-net/service-io](https://github.com/TheNextLvl-net/service-io).
+> **Unofficial fork for Minecraft 1.21.11 · 面向 Minecraft 1.21.11 的非官方分支**
+>
+> This repository is an **unofficial**, community-maintained fork of ServiceIO that targets **Minecraft 1.21.11 / JDK 21**
+> specifically. It is **not** affiliated with, endorsed by, or maintained by the original authors, and it is **not** an
+> official release of ServiceIO. For the official upstream project, please visit
+> [TheNextLvl-net/service-io](https://github.com/TheNextLvl-net/service-io).
+>
+> 本仓库是 ServiceIO 的**非官方**社区维护分支，**仅面向 Minecraft 1.21.11 / JDK 21**。本仓库与原作者无关、未获其
+> 认可或维护，也不是 ServiceIO 的官方发布版本。官方上游项目请前往
+> [TheNextLvl-net/service-io](https://github.com/TheNextLvl-net/service-io)。
 
 A modern, drop-in replacement for Vault that offers enhanced functionality,
 better performance, and seamless integration across plugins.
