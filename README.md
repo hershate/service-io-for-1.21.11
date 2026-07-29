@@ -1,5 +1,10 @@
 # ServiceIO – Full Replacement for Vault
 
+> [!IMPORTANT]
+> **Third-party maintained fork.** This repository is a community-maintained fork of ServiceIO and is **not** affiliated
+> with, endorsed by, or maintained by the original authors. It is maintained independently by a third party. For the
+> upstream project, please visit [TheNextLvl-net/service-io](https://github.com/TheNextLvl-net/service-io).
+
 A modern, drop-in replacement for Vault that offers enhanced functionality,
 better performance, and seamless integration across plugins.
 
