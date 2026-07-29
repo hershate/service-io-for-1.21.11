@@ -96,10 +96,20 @@ public record DecentHologram(eu.decentsoftware.holograms.api.holograms.Hologram 
     @Override
     public boolean clearLines() {
         if (hologram.getPages().isEmpty()) return false;
-        while (!hologram.getPages().isEmpty()) {
-            hologram.removePage(0);
+        final var page = hologram.getPage(0);
+        var changed = false;
+        for (var i = page.getLines().size() - 1; i >= 0; i--) {
+            page.removeLine(i);
+            changed = true;
         }
-        return true;
+        // Remove additional (paged-line) pages but always keep page 0: every line accessor
+        // in this wrapper (getLineCount/getLine/addXLine/...) dereferences getPage(0), which
+        // is null once the last page is removed, so stripping page 0 left the hologram unusable.
+        while (hologram.getPages().size() > 1) {
+            hologram.removePage(hologram.getPages().size() - 1);
+            changed = true;
+        }
+        return changed;
     }
 
     @Override

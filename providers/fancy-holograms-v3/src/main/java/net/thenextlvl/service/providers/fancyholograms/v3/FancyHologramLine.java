@@ -99,13 +99,14 @@ abstract class FancyHologramLine<D extends DisplayHologramData> implements Stati
 
     @Override
     public Vector3f getOffset() {
-        return data.getTranslation();
+        return new Vector3f(data.getTranslation());
     }
 
     @Override
     public boolean setOffset(final Vector3f offset) {
-        if (data.getTranslation().equals(offset)) return false;
-        data.setTranslation(offset);
+        final var translation = new Vector3f(offset);
+        if (data.getTranslation().equals(translation)) return false;
+        data.setTranslation(translation);
         return true;
     }
 
