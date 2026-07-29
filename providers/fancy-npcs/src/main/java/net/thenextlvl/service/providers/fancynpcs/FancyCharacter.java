@@ -97,7 +97,11 @@ public record FancyCharacter(Npc npc) implements Character {
 
     @Override
     public void lookAt(final Location target) {
-        final var location = npc().getData().getLocation().clone();
+        final var current = npc().getData().getLocation();
+        // getData().getLocation() may be null (the class wraps it in Optional.ofNullable elsewhere);
+        // without a current position the facing direction cannot be computed, so bail out instead of NPE-ing.
+        if (current == null) return;
+        final var location = current.clone();
         final var direction = location.setDirection(target.clone().subtract(location).toVector());
         teleportAsync(direction);
     }
