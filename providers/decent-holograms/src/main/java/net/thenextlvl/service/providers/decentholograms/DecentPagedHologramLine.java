@@ -100,8 +100,10 @@ public class DecentPagedHologramLine implements PagedHologramLine {
     @Override
     public int getPageIndex(final HologramLine line) {
         if (!(line instanceof final DecentHologramLine decent)) return -1;
-        final var parent = decent.line.getParent();
-        return parent != null ? hologram.hologram().getPages().indexOf(parent) : -1;
+        // The index of this line among the paged line's pages. The previous code
+        // returned the index of the containing DH page within the whole hologram,
+        // so removePage(line) deleted whatever line happened to sit at that page index.
+        return page.getLines().indexOf(decent.line);
     }
 
     @Override
@@ -182,7 +184,7 @@ public class DecentPagedHologramLine implements PagedHologramLine {
         final var line = new eu.decentsoftware.holograms.api.holograms.HologramLine(
                 page, hologram.getLocation(), ""
         );
-        page.addLine(line);
+        page.insertLine(index, line);
         return new DecentTextHologramLine(hologram, line);
     }
 
@@ -193,7 +195,7 @@ public class DecentPagedHologramLine implements PagedHologramLine {
         final var line = new eu.decentsoftware.holograms.api.holograms.HologramLine(
                 page, hologram.getLocation(), "#ICON:STONE"
         );
-        page.addLine(line);
+        page.insertLine(index, line);
         return new DecentItemHologramLine(hologram, line);
     }
 
@@ -204,7 +206,7 @@ public class DecentPagedHologramLine implements PagedHologramLine {
         final var line = new eu.decentsoftware.holograms.api.holograms.HologramLine(
                 page, hologram.getLocation(), "#HEAD:STONE"
         );
-        page.addLine(line);
+        page.insertLine(index, line);
         return new DecentBlockHologramLine(hologram, line, false);
     }
 
@@ -216,7 +218,7 @@ public class DecentPagedHologramLine implements PagedHologramLine {
         final var line = new eu.decentsoftware.holograms.api.holograms.HologramLine(
                 page, hologram.getLocation(), "#ENTITY:" + entityType.name()
         );
-        page.addLine(line);
+        page.insertLine(index, line);
         return new DecentEntityHologramLine(hologram, line);
     }
 
@@ -226,7 +228,7 @@ public class DecentPagedHologramLine implements PagedHologramLine {
         final var line = new eu.decentsoftware.holograms.api.holograms.HologramLine(
                 page, hologram.getLocation(), ""
         );
-        page.addLine(line);
+        page.insertLine(index, line);
         return new DecentTextHologramLine(hologram, line);
     }
 
@@ -236,7 +238,7 @@ public class DecentPagedHologramLine implements PagedHologramLine {
         final var line = new eu.decentsoftware.holograms.api.holograms.HologramLine(
                 page, hologram.getLocation(), "#ICON:STONE"
         );
-        page.addLine(line);
+        page.insertLine(index, line);
         return new DecentItemHologramLine(hologram, line);
     }
 
@@ -246,7 +248,7 @@ public class DecentPagedHologramLine implements PagedHologramLine {
         final var line = new eu.decentsoftware.holograms.api.holograms.HologramLine(
                 page, hologram.getLocation(), "#HEAD:STONE"
         );
-        page.addLine(line);
+        page.insertLine(index, line);
         return new DecentBlockHologramLine(hologram, line, false);
     }
 
@@ -257,7 +259,7 @@ public class DecentPagedHologramLine implements PagedHologramLine {
         final var line = new eu.decentsoftware.holograms.api.holograms.HologramLine(
                 page, hologram.getLocation(), "#ENTITY:" + entityType.name()
         );
-        page.addLine(line);
+        page.insertLine(index, line);
         return new DecentEntityHologramLine(hologram, line);
     }
 

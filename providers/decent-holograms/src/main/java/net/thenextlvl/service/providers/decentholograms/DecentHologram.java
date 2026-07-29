@@ -136,7 +136,7 @@ public record DecentHologram(eu.decentsoftware.holograms.api.holograms.Hologram 
         final var page = hologram.getPage(0);
         Objects.checkIndex(index, page.size() + 1);
         final var line = new eu.decentsoftware.holograms.api.holograms.HologramLine(page, getLocation(), "#ENTITY:" + entityType.name());
-        page.addLine(line);
+        page.insertLine(index, line);
         return new DecentEntityHologramLine(this, line);
     }
 
@@ -153,7 +153,7 @@ public record DecentHologram(eu.decentsoftware.holograms.api.holograms.Hologram 
         final var page = hologram.getPage(0);
         Objects.checkIndex(index, page.size() + 1);
         final var line = new eu.decentsoftware.holograms.api.holograms.HologramLine(page, getLocation(), "#HEAD:STONE");
-        page.addLine(line);
+        page.insertLine(index, line);
         return new DecentBlockHologramLine(this, line, false);
     }
 
@@ -170,7 +170,7 @@ public record DecentHologram(eu.decentsoftware.holograms.api.holograms.Hologram 
         final var page = hologram.getPage(0);
         Objects.checkIndex(index, page.size() + 1);
         final var line = new eu.decentsoftware.holograms.api.holograms.HologramLine(page, getLocation(), "#ICON:STONE");
-        page.addLine(line);
+        page.insertLine(index, line);
         return new DecentItemHologramLine(this, line);
     }
 
@@ -187,7 +187,7 @@ public record DecentHologram(eu.decentsoftware.holograms.api.holograms.Hologram 
         final var page = hologram.getPage(0);
         Objects.checkIndex(index, page.size() + 1);
         final var line = new eu.decentsoftware.holograms.api.holograms.HologramLine(page, getLocation(), "");
-        page.addLine(line);
+        page.insertLine(index, line);
         return new DecentTextHologramLine(this, line);
     }
 
@@ -200,9 +200,8 @@ public record DecentHologram(eu.decentsoftware.holograms.api.holograms.Hologram 
 
     @Override
     public PagedHologramLine addPagedLine(final int index) throws IndexOutOfBoundsException, CapabilityException {
-        hologram.addPage();
-        final var pageIndex = hologram.size() - 1;
-        return new DecentPagedHologramLine(this, hologram.getPage(pageIndex));
+        Objects.checkIndex(index, hologram.size() + 1);
+        return new DecentPagedHologramLine(this, hologram.insertPage(index));
     }
 
     @Override
@@ -218,7 +217,7 @@ public record DecentHologram(eu.decentsoftware.holograms.api.holograms.Hologram 
         Objects.checkIndex(index, page.size());
         page.removeLine(index);
         final var line = new eu.decentsoftware.holograms.api.holograms.HologramLine(page, getLocation(), "#ENTITY:" + entityType.name());
-        page.addLine(line);
+        page.insertLine(index, line);
         return new DecentEntityHologramLine(this, line);
     }
 
@@ -228,7 +227,7 @@ public record DecentHologram(eu.decentsoftware.holograms.api.holograms.Hologram 
         Objects.checkIndex(index, page.size());
         page.removeLine(index);
         final var line = new eu.decentsoftware.holograms.api.holograms.HologramLine(page, getLocation(), "#HEAD:STONE");
-        page.addLine(line);
+        page.insertLine(index, line);
         return new DecentBlockHologramLine(this, line, false);
     }
 
@@ -238,7 +237,7 @@ public record DecentHologram(eu.decentsoftware.holograms.api.holograms.Hologram 
         Objects.checkIndex(index, page.size());
         page.removeLine(index);
         final var line = new eu.decentsoftware.holograms.api.holograms.HologramLine(page, getLocation(), "#ICON:STONE");
-        page.addLine(line);
+        page.insertLine(index, line);
         return new DecentItemHologramLine(this, line);
     }
 
@@ -248,7 +247,7 @@ public record DecentHologram(eu.decentsoftware.holograms.api.holograms.Hologram 
         Objects.checkIndex(index, page.size());
         page.removeLine(index);
         final var line = new eu.decentsoftware.holograms.api.holograms.HologramLine(page, getLocation(), "");
-        page.addLine(line);
+        page.insertLine(index, line);
         return new DecentTextHologramLine(this, line);
     }
 

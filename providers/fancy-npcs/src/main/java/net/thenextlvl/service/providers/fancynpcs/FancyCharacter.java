@@ -211,10 +211,14 @@ public record FancyCharacter(Npc npc) implements Character {
 
         final var attribute = plugin.getAttributeManager().getAttributeByName(EntityType.PLAYER, "invisible");
 
-        return plugin.getFancyNpcConfig().isSkipInvisibleNpcs()
+        // An NPC is hidden (canSee == false) only when invisible-NPC skipping is enabled
+        // and this NPC is an "invisible" NPC (attribute set, not glowing, no equipment).
+        // The previous logic returned true exactly for these skip-targets, inverting
+        // visibility and causing addViewer to refuse normal players while admitting invisible ones.
+        return !(plugin.getFancyNpcConfig().isSkipInvisibleNpcs()
                 && npc().getData().getAttributes().getOrDefault(attribute, "false").equalsIgnoreCase("true")
                 && !npc().getData().isGlowing()
-                && npc().getData().getEquipment().isEmpty();
+                && npc().getData().getEquipment().isEmpty());
     }
 
     @Override

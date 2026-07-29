@@ -69,7 +69,7 @@ public final class CitizensCharacterController implements CharacterController {
     @Override
     public Stream<Character> getCharacters(final World world) {
         return streamNPCs()
-                .filter(character -> world.equals(character.getEntity().getWorld()))
+                .filter(npc -> npc.getEntity() != null && world.equals(npc.getEntity().getWorld()))
                 .map(CitizensCharacter::new);
     }
 
