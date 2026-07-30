@@ -1,0 +1,11 @@
+# warmup=200000 rounds=15 iters/round=200000
+  [verify] new store 'balance_currency_USD' -> 'P:balance_currency_%s' (specificity correct); legacy is non-deterministic for this input.
+balance                                                 121             20      6.05x
+accounts_count                                          176             19      9.26x
+balance_currency_USD                                    258             75      3.44x
+account_00000000-0000-0000-0000-000000000001           1253            114     10.99x
+totally_unknown_placeholder                             377             35     10.77x
+char exact (Player)                                     224              3     74.67x
+char exact (Zombie)                                     301              4     75.25x
+hologram assignable (Player)                           3749           2781      1.35x
+Results written to D:\Github\repo\service-io-for-1.21.11\benchmark\results.txt
