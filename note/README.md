@@ -14,7 +14,7 @@
 JAVA_HOME="/d/Java/21" <gradle>/bin/gradle build -x test --no-daemon --console=plain
 ```
 
-产物：`plugin/build/libs/service-io-3.0.0-pre11-all.jar`（Java 21 字节码，可直接放进 1.21.11 服务器的 `plugins/`）。
+产物：`plugin/build/libs/Service-IO-1.21.11-3.0.0.jar`（Java 21 字节码，可直接放进 1.21.11 服务器的 `plugins/`）。命名规则：`Service-IO-<MC版本>-<版本号>`。
 
 ## 文件索引
 
@@ -24,6 +24,7 @@ JAVA_HOME="/d/Java/21" <gradle>/bin/gradle build -x test --no-daemon --console=p
 | [改动记录.md](改动记录.md) | 为 JDK 21 / 1.21.11 做的全部改动及原因（文件、提交哈希、依赖降级表）；含性能优化小节 |
 | [国内网络与镜像.md](国内网络与镜像.md) | Gradle 发行版镜像、各 Maven 仓库可达性、踩过的网络坑 |
 | [report/perf/](report/perf/) | 性能优化对比报告（`2026-07-30-perf-optimization.md` + 原始 benchmark 输出） |
+| [release/](release/) | 各版本发布说明（`3.0.0.md` 等） |
 
 ## benchmark 模块
 
