@@ -46,7 +46,9 @@ dependencies {
 
 tasks.shadowJar {
     relocate("org.bstats", "net.thenextlvl.service.utils.bstats")
-    archiveBaseName.set("service-io")
+    // Fork 发布件命名规则：Service-IO-1.21.11-<版本号>.jar（1.21.11 为目标 MC 版本）
+    archiveBaseName.set("Service-IO-1.21.11")
+    archiveClassifier.set("")
 }
 
 tasks.test {
