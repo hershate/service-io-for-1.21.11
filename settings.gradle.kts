@@ -4,6 +4,7 @@ plugins {
 
 rootProject.name = "service-io"
 include("plugin")
+include("benchmark")
 
 include("providers:citizens")
 include("providers:decent-holograms")
