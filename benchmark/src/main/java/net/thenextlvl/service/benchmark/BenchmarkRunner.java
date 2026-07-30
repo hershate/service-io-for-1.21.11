@@ -1,6 +1,7 @@
 package net.thenextlvl.service.benchmark;
 
 import net.thenextlvl.service.benchmark.entitytype.EntityTypeBenchmark;
+import net.thenextlvl.service.benchmark.placeholder.PlaceholderCorrectnessBenchmark;
 import net.thenextlvl.service.benchmark.placeholder.PlaceholderDispatchBenchmark;
 import net.thenextlvl.service.benchmark.util.BenchResult;
 
@@ -37,6 +38,17 @@ public final class BenchmarkRunner {
 
         System.out.println(report.get(0));
         System.out.println(report.get(1));
+
+        // Correctness gate: the dispatch optimization changes overlap resolution, so verify every
+        // documented placeholder of the real UnlockedEconomyPlaceholderStore resolves correctly
+        // BEFORE trusting any timing number.
+        final int passed = PlaceholderCorrectnessBenchmark.check();
+        final String gate = "[correctness] all " + passed
+                + " documented placeholder cases (literals + all overlapping patterns) resolved correctly";
+        report.add("");
+        report.add("# " + gate);
+        System.out.println();
+        System.out.println(gate);
 
         runSection("Placeholder dispatch (resolve)", report,
                 PlaceholderDispatchBenchmark.run(warmup, rounds, perRound));
