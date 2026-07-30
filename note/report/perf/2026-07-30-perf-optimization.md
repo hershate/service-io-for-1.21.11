@@ -78,6 +78,7 @@ JAVA_HOME=/d/Java/21 <gradle>/bin/gradle :benchmark:run --console=plain
 - 字面量/pattern 的分类用严格的"无 `%s` 且无正则元字符"判定；含元字符的 pattern 落入 `fallback` 列表照常正则匹配，不会误分类。
 - 锚点预过滤是**可靠（sound）**的：缺任一必须字面锚点则正则必不命中，仅作跳过，不改变任何命中结果。
 - `EntityType` 缓存用 `putIfAbsent`（首现优先）保持与原 `findAny`（顺序流即首现）等价。
+- **正确性门禁**：因为分桶+特异性排序改变了重叠占位符的命中结果（虽是修 bug，但须证明不破坏既有占位符），benchmark 内置 [PlaceholderCorrectnessBenchmark](../../../benchmark/src/main/java/net/thenextlvl/service/benchmark/placeholder/PlaceholderCorrectnessBenchmark.java)，注册真实 `UnlockedEconomyPlaceholderStore` 的**全部 18 个 resolver（6 字面量 + 12 pattern，含每一个重叠多段 pattern）**，断言每个文档化输入都解析到其预期 resolver。**全部 18 例通过**（性能测量前先跑，失败即中止）。例如 `account_<uuid>_currency_USD_world_survival_formatted` 在旧实现下命中结果随 HashMap 序随机，现确定为最具体的 `account_%s_currency_%s_world_%s_formatted`。
 - 全量 `gradle build -x test` 通过；产物字节码仍为 Java 21。
 
 ## 6. 不在本次范围（属固有约束，改即破坏红线）
@@ -89,7 +90,7 @@ JAVA_HOME=/d/Java/21 <gradle>/bin/gradle :benchmark:run --console=plain
 ## 7. 文件清单
 
 新增/修改：
-- `benchmark/`（新模块）：`build.gradle.kts`、`BenchmarkRunner`、`util/{Stubs,BukkitStubs,MicroBench,BenchResult}`、`legacy/LegacyPlaceholderStore`、`placeholder/PlaceholderDispatchBenchmark`、`entitytype/EntityTypeBenchmark`
+- `benchmark/`（新模块）：`build.gradle.kts`、`BenchmarkRunner`、`util/{Stubs,BukkitStubs,MicroBench,BenchResult}`、`legacy/LegacyPlaceholderStore`、`placeholder/{PlaceholderDispatchBenchmark,PlaceholderCorrectnessBenchmark}`、`entitytype/EntityTypeBenchmark`
 - `plugin/.../placeholder/api/PlaceholderStore.java`（重写）
 - `src/.../character/CharacterController.java`、`src/.../hologram/line/EntityHologramLine.java`（EntityType 缓存）
 - `settings.gradle.kts`（include benchmark）
