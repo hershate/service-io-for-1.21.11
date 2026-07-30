@@ -5,6 +5,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -51,10 +52,18 @@ public interface EntityHologramLine extends StaticHologramLine {
      */
     boolean setScale(double scale);
 
+    /**
+     * Cached list of entity types that expose a backing entity class, built once. Avoids
+     * allocating a fresh {@code EntityType.values()} array and re-filtering on every lookup.
+     */
+    List<EntityType> ENTITY_TYPES_WITH_CLASS = Arrays.stream(EntityType.values())
+            .filter(type -> type.getEntityClass() != null)
+            .toList();
+
     static Optional<EntityType> getEntityType(final Class<? extends Entity> entityClass) throws IllegalArgumentException {
-        return Arrays.stream(EntityType.values())
-                .filter(type -> type.getEntityClass() != null)
-                .filter(type -> type.getEntityClass().isAssignableFrom(entityClass))
-                .findAny();
+        for (final var type : ENTITY_TYPES_WITH_CLASS) {
+            if (type.getEntityClass().isAssignableFrom(entityClass)) return Optional.of(type);
+        }
+        return Optional.empty();
     }
 }

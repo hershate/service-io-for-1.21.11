@@ -9,7 +9,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -180,10 +181,27 @@ public interface CharacterController extends CapabilityProvider<CharacterCapabil
      */
     boolean isCharacter(Entity entity);
 
+    /**
+     * Cached {@link EntityType#getEntityClass()} -> {@link EntityType} mapping, built once.
+     * Avoids allocating a fresh {@code EntityType.values()} array and streaming it on every
+     * {@code createCharacter}/{@code spawnCharacter} call by class.
+     */
+    Map<Class<? extends Entity>, EntityType> ENTITY_TYPE_BY_CLASS = CharacterController.buildEntityTypeMap();
+
+    private static Map<Class<? extends Entity>, EntityType> buildEntityTypeMap() {
+        final Map<Class<? extends Entity>, EntityType> map = new HashMap<>();
+        for (final var type : EntityType.values()) {
+            final var entityClass = type.getEntityClass();
+            if (entityClass != null) map.putIfAbsent(entityClass, type);
+        }
+        return Map.copyOf(map);
+    }
+
     private static EntityType getEntityType(final Class<? extends Entity> type) {
-        return Arrays.stream(EntityType.values())
-                .filter(entityType -> type.equals(entityType.getEntityClass()))
-                .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("Invalid entity type: " + type.getName()));
+        final var found = ENTITY_TYPE_BY_CLASS.get(type);
+        if (found == null) {
+            throw new IllegalArgumentException("Invalid entity type: " + type.getName());
+        }
+        return found;
     }
 }
